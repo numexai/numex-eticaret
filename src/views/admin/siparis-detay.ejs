@@ -1,0 +1,73 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="bolum" style="padding-top:clamp(20px,3vw,34px);">
+  <div class="bolum-baslik">
+    <div>
+      <div class="ust-yazi">Sipariş</div>
+      <h1><%= siparis.order_code %></h1>
+    </div>
+    <a class="btn btn-ikincil" href="/admin/siparisler">← Siparişlere dön</a>
+  </div>
+
+  <div class="iki-kolon">
+    <div>
+      <div class="tablo-sar" style="margin-bottom:20px;">
+        <table>
+          <thead>
+            <tr><th>Ürün</th><th class="sag">Birim</th><th class="sag">Adet</th><th class="sag">Tutar</th></tr>
+          </thead>
+          <tbody>
+            <% kalemler.forEach(function (k) { %>
+              <tr>
+                <td><%= k.product_name %></td>
+                <td class="sag"><%= tl(k.unit_price) %></td>
+                <td class="sag"><%= k.quantity %></td>
+                <td class="sag"><%= tl(k.unit_price * k.quantity) %></td>
+              </tr>
+            <% }); %>
+            <tr>
+              <td colspan="3" class="sag" style="font-weight:700;">Genel toplam</td>
+              <td class="sag" style="font-weight:700;"><%= tl(siparis.total) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ozet-kart" style="position:static; margin-bottom:20px;">
+        <h3 style="margin-bottom:12px; font-size:1rem;">Teslimat bilgileri</h3>
+        <div class="ozet-satir"><span>Ad soyad</span><span style="color:var(--murekkep); font-weight:600;"><%= siparis.customer_name %></span></div>
+        <div class="ozet-satir"><span>E-posta</span><span style="color:var(--murekkep);"><%= siparis.customer_email %></span></div>
+        <div class="ozet-satir"><span>Telefon</span><span style="color:var(--murekkep);"><%= siparis.customer_phone || '—' %></span></div>
+        <div class="ozet-satir"><span>Şehir</span><span style="color:var(--murekkep);"><%= siparis.city %></span></div>
+        <div class="ozet-satir" style="align-items:flex-start;"><span>Adres</span><span style="color:var(--murekkep); text-align:right; max-width:60%;"><%= siparis.address %></span></div>
+        <% if (siparis.note) { %>
+          <div class="ozet-satir" style="align-items:flex-start;"><span>Not</span><span style="color:var(--murekkep); text-align:right; max-width:60%;"><%= siparis.note %></span></div>
+        <% } %>
+      </div>
+    </div>
+
+    <aside>
+      <div class="ozet-kart" style="position:static;">
+        <h3 style="margin-bottom:14px; font-size:1rem;">Durum</h3>
+        <div class="ozet-satir"><span>Ödeme yöntemi</span><span style="color:var(--murekkep); font-weight:600;"><%= siparis.payment_method === 'stripe' ? 'Stripe' : 'Kapıda ödeme' %></span></div>
+        <div class="ozet-satir"><span>Ödeme durumu</span><span class="durum <%= siparis.payment_status %>"><%= ODEME_ETIKET[siparis.payment_status] || siparis.payment_status %></span></div>
+        <div class="ozet-satir"><span>Tarih</span><span style="color:var(--murekkep);"><%= tarih(siparis.created_at) %></span></div>
+        <% if (siparis.stripe_session_id) { %>
+          <div class="ozet-satir" style="align-items:flex-start;"><span>Stripe oturumu</span><span style="color:var(--murekkep-soluk); font-size:.78rem; text-align:right; word-break:break-all; max-width:60%;"><%= siparis.stripe_session_id %></span></div>
+        <% } %>
+
+        <form action="/admin/siparisler/<%= siparis.id %>/durum" method="post" style="margin-top:16px; display:grid; gap:10px;">
+          <div class="alan">
+            <label for="status">Sipariş durumunu güncelle</label>
+            <select id="status" name="status">
+              <% ['yeni','hazirlaniyor','kargoda','teslim','iptal'].forEach(function (d) { %>
+                <option value="<%= d %>" <%= siparis.status === d ? 'selected' : '' %>><%= DURUM_ETIKET[d] %></option>
+              <% }); %>
+            </select>
+          </div>
+          <button class="btn btn-birincil btn-tam" type="submit">Durumu kaydet</button>
+        </form>
+      </div>
+    </aside>
+  </div>
+</div>

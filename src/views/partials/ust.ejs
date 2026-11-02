@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= baslik %> · <%= siteName %></title>
+  <meta name="description" content="Numex E-Ticaret — Numex AI tarafından geliştirilen, MIT lisanslı genel amaçlı e-ticaret başlangıç iskeleti.">
+  <link rel="stylesheet" href="/css/stil.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%231c2126'/%3E%3Ctext x='16' y='23' font-family='Segoe UI,sans-serif' font-size='19' font-weight='700' fill='%23b4472c' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<% if (typeof demoModu !== 'undefined' && demoModu) { %><div style="background:#7a2e12;color:#fff;text-align:center;padding:8px 12px;font-size:.88rem;">Canlı demo: gerçek ödeme yoktur, ürünler temsilîdir. Gerçek ad, adres veya telefon girmeyin; veriler 30 dakikada bir silinir.</div><% } %>
+<div class="ustbar">
+  <div class="kap">
+    <span>Numex AI tarafından geliştirildi · MIT lisanslı açık kaynak</span>
+    <span><a href="/siparis-takip">Sipariş takibi</a> &nbsp;·&nbsp; <a href="/hakkimizda">Hakkımızda</a></span>
+  </div>
+</div>
+
+<header class="site">
+  <div class="kap site-ic">
+    <a class="marka" href="/">Numex<span class="nokta">.</span> <small>E-Ticaret</small></a>
+
+    <nav class="ana-menu">
+      <a href="/" class="<%= currentPath === '/' ? 'aktif' : '' %>">Ana Sayfa</a>
+      <a href="/urunler" class="<%= currentPath.indexOf('/urunler') === 0 || currentPath.indexOf('/urun/') === 0 ? 'aktif' : '' %>">Ürünler</a>
+      <a href="/hakkimizda" class="<%= currentPath === '/hakkimizda' ? 'aktif' : '' %>">Hakkımızda</a>
+      <a href="/siparis-takip" class="<%= currentPath === '/siparis-takip' ? 'aktif' : '' %>">Sipariş Takip</a>
+    </nav>
+
+    <form class="arama-kutu" action="/urunler" method="get" role="search">
+      <input type="text" name="q" placeholder="Ürün ara…" aria-label="Ürün ara" value="<%= typeof q !== 'undefined' && q ? q : '' %>">
+      <button type="submit">Ara</button>
+    </form>
+
+    <a class="sepet-dugme" href="/sepet">
+      Sepet
+      <% if (cartCount > 0) { %><span class="rozet"><%= cartCount %></span><% } %>
+    </a>
+  </div>
+</header>
+
+<% if (flashSuccess && flashSuccess.length) { %>
+  <div class="kap uyarilar">
+    <% flashSuccess.forEach(function (m) { %><div class="uyari-kutu basari"><%= m %></div><% }); %>
+  </div>
+<% } %>
+<% if (flashError && flashError.length) { %>
+  <div class="kap uyarilar">
+    <% flashError.forEach(function (m) { %><div class="uyari-kutu hata"><%= m %></div><% }); %>
+  </div>
+<% } %>
+
+<main>

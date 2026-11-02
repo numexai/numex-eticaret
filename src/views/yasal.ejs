@@ -1,0 +1,75 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="kap">
+  <div class="bolum">
+    <div style="max-width:760px;">
+
+      <h1>Yasal Bilgilendirme</h1>
+      <p class="alt">Son güncelleme: <%= new Date().toLocaleDateString('tr-TR') %></p>
+
+      <div class="uyari-kutu" style="margin:22px 0; padding:14px 16px;">
+        <strong>Mağaza sahibine not:</strong> Bu sayfadaki metinler genel bir çerçevedir.
+        Yayına almadan önce kendi unvan, adres, MERSİS/VKN bilgilerinizi ekleyin ve
+        metinleri bir hukuk uzmanına kontrol ettirin. Aksi hâlde bu sayfa sizi bağlamaz.
+      </div>
+
+      <h2 id="kvkk">1. Kişisel Verilerin Korunması (KVKK)</h2>
+      <p>
+        6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, siparişinizi oluşturabilmek,
+        teslimatı gerçekleştirebilmek ve yasal yükümlülüklerimizi yerine getirebilmek amacıyla
+        ad-soyad, e-posta, telefon, teslimat adresi ve sipariş bilgileriniz işlenir.
+      </p>
+      <p>
+        Verileriniz yalnızca siparişin ifası için zorunlu olan süre boyunca ve mevzuatın öngördüğü
+        saklama süreleri kadar tutulur. Ödeme bilgileriniz (kart numarası vb.) sitemizde
+        <strong>saklanmaz</strong>; ödeme, anlaşmalı ödeme kuruluşunun kendi güvenli sayfasında alınır.
+      </p>
+      <p>
+        KVKK madde 11 uyarınca; verilerinizin işlenip işlenmediğini öğrenme, düzeltilmesini,
+        silinmesini veya anonim hâle getirilmesini isteme ve itiraz etme haklarınız bulunur.
+        Taleplerinizi mağazanın iletişim adresine iletebilirsiniz.
+      </p>
+
+      <h2 id="mesafeli-satis">2. Mesafeli Satış Sözleşmesi</h2>
+      <p>
+        İşbu sözleşme, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler
+        Yönetmeliği uyarınca, sipariş veren tüketici ile satıcı arasında elektronik ortamda
+        kurulmuş sayılır. Sipariş onayı ile taraflar sözleşme hükümlerini kabul etmiş olur.
+      </p>
+      <p><strong>Sözleşme konusu:</strong> Sipariş özetinde belirtilen ürünlerin satışı ve teslimi.</p>
+      <p><strong>Ödeme:</strong> Sipariş tutarı, seçilen ödeme yöntemiyle tahsil edilir.</p>
+      <p><strong>Teslimat:</strong> Sipariş, stok durumuna göre en kısa sürede kargoya verilir.
+        Teslimat süresi ve kargo ücreti sipariş özetinde belirtilir.</p>
+
+      <h3>Cayma hakkı</h3>
+      <p>
+        Tüketici, malın tesliminden itibaren <strong>14 gün</strong> içinde herhangi bir gerekçe
+        göstermeksizin ve cezai şart ödemeksizin cayma hakkına sahiptir. Cayma hakkının
+        kullanılması hâlinde ürün, kullanılmamış ve yeniden satılabilir durumda olmalıdır.
+      </p>
+      <p>
+        <strong>Cayma hakkı kullanılamayan ürünler:</strong> Tüketicinin istekleri doğrultusunda
+        kişiselleştirilen ürünler, çabuk bozulabilen ürünler ve teslimden sonra ambalajı açılmış
+        olan hijyen ürünleri (mevzuatın öngördüğü hâller) cayma hakkı kapsamı dışındadır.
+      </p>
+
+      <h2 id="on-bilgilendirme">3. Ön Bilgilendirme Formu</h2>
+      <p>Ödeme yapmadan önce aşağıdaki bilgileri okuduğunuzu onaylamış olursunuz:</p>
+      <ul>
+        <li><strong>Satıcı:</strong> Mağaza sahibi tarafından doldurulacaktır (unvan, adres, MERSİS/VKN).</li>
+        <li><strong>Ürün:</strong> Sipariş özetinde adı, adedi ve birim fiyatı belirtilir.</li>
+        <li><strong>Toplam fiyat:</strong> KDV dâhil sipariş özetinde gösterilir.</li>
+        <li><strong>Ödeme yöntemi:</strong> Sipariş sırasında seçilen yöntem.</li>
+        <li><strong>Teslimat:</strong> Sipariş özetinde belirtilen adres.</li>
+        <li><strong>Cayma hakkı:</strong> Teslimden itibaren 14 gün.</li>
+        <li><strong>Şikâyet ve itiraz:</strong> Tüketici Hakem Heyetleri ve Tüketici Mahkemeleri.</li>
+      </ul>
+
+      <p style="margin-top:28px;">
+        <a class="btn btn-ikincil" href="/odeme">← Ödemeye dön</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/alt') %>

@@ -1,0 +1,13 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="kap hata-sayfa">
+  <div class="hata-kod"><%= kod %></div>
+  <h1><%= baslik %></h1>
+  <p style="color:var(--murekkep-soluk); max-width:52ch; margin:0 auto 24px;"><%= mesaj %></p>
+  <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+    <a class="btn btn-birincil" href="/">Ana sayfaya dön</a>
+    <a class="btn btn-ikincil" href="/urunler">Ürünlere göz at</a>
+  </div>
+</div>
+
+<%- include('partials/alt') %>

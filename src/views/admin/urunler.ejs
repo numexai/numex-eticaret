@@ -1,0 +1,68 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="bolum" style="padding-top:clamp(20px,3vw,34px);">
+  <div class="bolum-baslik">
+    <div>
+      <div class="ust-yazi">Katalog</div>
+      <h1>Ürünler</h1>
+    </div>
+    <a class="btn btn-birincil" href="/admin/urunler/yeni">Yeni ürün ekle</a>
+  </div>
+
+  <% if (!urunler.length) { %>
+    <div class="bos-durum">
+      <h3>Katalog boş</h3>
+      <p>Henüz ürün eklenmemiş. İlk ürünü ekleyerek mağazayı açabilirsin.</p>
+      <a class="btn btn-birincil" href="/admin/urunler/yeni">İlk ürünü ekle</a>
+    </div>
+  <% } else { %>
+    <div class="tablo-sar">
+      <table>
+        <thead>
+          <tr>
+            <th>Ürün</th>
+            <th>Kategori</th>
+            <th class="sag">Fiyat</th>
+            <th class="sag">Stok</th>
+            <th>Durum</th>
+            <th class="sag">İşlem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% urunler.forEach(function (p) { %>
+            <tr>
+              <td>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div class="sepet-kucuk-gorsel" style="width:44px; height:44px; flex:0 0 44px;">
+                    <% if (p.image) { %><img src="<%= p.image %>" alt=""><% } else { %><span>—</span><% } %>
+                  </div>
+                  <div>
+                    <strong><%= p.name %></strong>
+                    <% if (p.featured) { %><span class="durum hazirlaniyor" style="margin-left:6px;">Öne çıkan</span><% } %>
+                    <div class="stok-not">/urun/<%= p.slug %></div>
+                  </div>
+                </div>
+              </td>
+              <td><%= p.category_name || '—' %></td>
+              <td class="sag"><%= tl(p.price) %></td>
+              <td class="sag" style="<%= p.stock <= 5 ? 'color:var(--hata); font-weight:600;' : '' %>"><%= p.stock %></td>
+              <td>
+                <% if (p.active) { %>
+                  <span class="durum teslim">Yayında</span>
+                <% } else { %>
+                  <span class="durum yeni">Gizli</span>
+                <% } %>
+              </td>
+              <td class="sag" style="white-space:nowrap;">
+                <a class="btn btn-ikincil btn-kucuk" href="/admin/urunler/<%= p.id %>/duzenle">Düzenle</a>
+                <form action="/admin/urunler/<%= p.id %>/sil" method="post" style="display:inline;" onsubmit="return confirm('&quot;<%= p.name %>&quot; kalıcı olarak silinecek. Emin misin?');">
+                  <button class="btn btn-tehlike btn-kucuk" type="submit">Sil</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>

@@ -1,0 +1,76 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="kap">
+  <div class="bolum" style="padding-bottom:0;">
+    <div class="bolum-baslik">
+      <div>
+        <div class="ust-yazi">Sepet</div>
+        <h1>Sepetim</h1>
+      </div>
+      <% if (cart.length) { %><p><%= cart.length %> çeşit ürün</p><% } %>
+    </div>
+  </div>
+
+  <% if (!cart.length) { %>
+    <div class="bos-durum" style="margin-bottom:48px;">
+      <h3>Sepetin şu an boş</h3>
+      <p>Kataloğa göz atıp beğendiğin ürünleri sepete ekleyebilirsin. Sepetteki ürünler oturumun boyunca saklanır.</p>
+      <a class="btn btn-birincil" href="/urunler">Ürünlere göz at</a>
+    </div>
+  <% } else { %>
+    <div class="iki-kolon" style="padding-bottom:48px;">
+      <div style="background:var(--kart); border:1px solid var(--cizgi); border-radius:var(--yaricap); padding:0 clamp(14px,2vw,22px);">
+        <% cart.forEach(function (it) { %>
+          <div class="sepet-kalem">
+            <div class="sepet-kucuk-gorsel">
+              <% if (it.image) { %>
+                <img src="<%= it.image %>" alt="<%= it.name %>">
+              <% } else { %>
+                <span>Görsel yok</span>
+              <% } %>
+            </div>
+
+            <div>
+              <a href="/urun/<%= it.slug %>" style="font-weight:600;"><%= it.name %></a>
+              <div class="stok-not" style="margin-top:4px;">Birim fiyat: <%= tl(it.price) %></div>
+
+              <form class="adet-form" action="/sepet/guncelle" method="post">
+                <input type="hidden" name="product_id" value="<%= it.productId %>">
+                <input type="number" name="quantity" value="<%= it.quantity %>" min="1" aria-label="Adet">
+                <button class="btn btn-ikincil btn-kucuk" type="submit">Güncelle</button>
+              </form>
+            </div>
+
+            <div class="sag">
+              <div class="fiyat"><%= tl(it.price * it.quantity) %></div>
+              <form action="/sepet/cikar" method="post" style="margin-top:8px;">
+                <input type="hidden" name="product_id" value="<%= it.productId %>">
+                <button class="btn btn-sade btn-kucuk" type="submit" style="color:var(--hata);">Çıkar</button>
+              </form>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+
+      <aside class="ozet-kart">
+        <h3 style="margin-bottom:14px;">Sipariş özeti</h3>
+        <div class="ozet-satir">
+          <span>Ara toplam</span>
+          <span style="color:var(--murekkep); font-weight:600;"><%= tl(toplam) %></span>
+        </div>
+        <div class="ozet-satir">
+          <span>Kargo</span>
+          <span style="color:var(--murekkep); font-weight:600;">Ödeme adımında</span>
+        </div>
+        <div class="ozet-satir toplam">
+          <span>Toplam</span>
+          <span><%= tl(toplam) %></span>
+        </div>
+        <a class="btn btn-birincil btn-tam" href="/odeme" style="margin-top:16px;">Siparişi tamamla</a>
+        <a class="btn btn-ikincil btn-tam" href="/urunler" style="margin-top:10px;">Alışverişe devam et</a>
+      </aside>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials/alt') %>

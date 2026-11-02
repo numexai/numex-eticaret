@@ -1,0 +1,24 @@
+<a class="urun-kart" href="/urun/<%= u.slug %>">
+  <div class="urun-gorsel">
+    <img src="<%= u.image || urunKapagi(u) %>" alt="<%= u.name %>" loading="lazy">
+    <% if (u.stock <= 0) { %>
+      <span class="etiket soluk">Stokta yok</span>
+    <% } else if (u.featured) { %>
+      <span class="etiket">Öne çıkan</span>
+    <% } else if (u.stock <= 5) { %>
+      <span class="etiket soluk">Son adetler</span>
+    <% } %>
+  </div>
+  <div class="urun-govde">
+    <% if (u.category_name) { %>
+      <span class="urun-kategori"><%= u.category_name %></span>
+    <% } %>
+    <span class="urun-ad"><%= u.name %></span>
+    <div class="urun-alt">
+      <span class="fiyat"><%= tl(u.price) %></span>
+      <span class="stok-not <%= u.stock <= 0 ? 'yok' : '' %>">
+        <%= u.stock <= 0 ? 'Tükendi' : (u.stock <= 5 ? 'Son ' + u.stock + ' adet' : 'Stokta') %>
+      </span>
+    </div>
+  </div>
+</a>

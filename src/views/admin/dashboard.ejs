@@ -1,0 +1,146 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="bolum" style="padding-top:clamp(20px,3vw,34px);">
+  <div class="bolum-baslik">
+    <div>
+      <div class="ust-yazi">Genel bakış</div>
+      <h1>Yönetim paneli</h1>
+    </div>
+    <p>Hoş geldin, <%= currentUser.name %>. Bugün mağazanın durumu aşağıda.</p>
+  </div>
+
+  <div class="istatistik-izgara">
+    <div class="istatistik">
+      <div class="etiket-kucuk">Yayındaki ürün</div>
+      <div class="deger"><%= urunSayisi %></div>
+      <div class="alt-not"><a href="/admin/urunler" style="color:var(--vurgu);">Ürünleri yönet</a></div>
+    </div>
+    <div class="istatistik">
+      <div class="etiket-kucuk">Kategori</div>
+      <div class="deger"><%= kategoriSayisi %></div>
+      <div class="alt-not"><a href="/admin/kategoriler" style="color:var(--vurgu);">Kategorileri yönet</a></div>
+    </div>
+    <div class="istatistik">
+      <div class="etiket-kucuk">Toplam sipariş</div>
+      <div class="deger"><%= siparisSayisi %></div>
+      <div class="alt-not"><a href="/admin/siparisler" style="color:var(--vurgu);">Siparişleri gör</a></div>
+    </div>
+    <div class="istatistik">
+      <div class="etiket-kucuk">Ödenen ciro</div>
+      <div class="deger" style="font-size:clamp(1.05rem,2vw,1.35rem);"><%= tl(ciro) %></div>
+      <div class="alt-not">Ödendi + kapıda ödeme</div>
+    </div>
+  </div>
+
+  <% if (bekleyenSiparis > 0) { %>
+    <div class="panel-uyari">
+      <strong><%= bekleyenSiparis %> sipariş işlem bekliyor.</strong>
+      Yeni ve hazırlanıyor durumundaki siparişleri gözden geçir.
+      <a href="/admin/siparisler?durum=yeni">Siparişlere git →</a>
+    </div>
+  <% } %>
+
+  <div class="panel-kart" style="margin-bottom:clamp(18px,2.4vw,28px);">
+    <div class="panel-kart-baslik">
+      <h2>Satış trendi</h2>
+      <span class="ipucu-metin">Son <%= grafik.length %> işlem günü · tutara göre</span>
+    </div>
+    <% if (!grafik.length) { %>
+      <p style="margin:0; font-size:.9rem; color:var(--murekkep-soluk);">
+        Henüz sipariş verisi yok. İlk sipariş geldiğinde grafik burada oluşur.
+      </p>
+    <% } else { %>
+      <div class="grafik" role="img" aria-label="Günlük satış tutarları grafiği">
+        <% grafik.forEach(function (g) { %>
+          <div class="grafik-kolon" title="<%= g.gun %> · <%= tl(g.tutar) %> · <%= g.adet %> sipariş">
+            <div class="grafik-cubuk" style="height:<%= Math.max(6, g.oran) %>%;"></div>
+            <span class="grafik-etiket"><%= g.gun.slice(8) %></span>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+
+  <div class="iki-kolon">
+    <section>
+      <div class="bolum-baslik" style="margin-bottom:14px;">
+        <h2 style="margin:0; font-size:1.12rem;">Son siparişler</h2>
+        <a class="btn btn-sade btn-kucuk" href="/admin/siparisler">Tümü</a>
+      </div>
+
+      <% if (!sonSiparisler.length) { %>
+        <div class="bos-durum">
+          <h3>Henüz sipariş yok</h3>
+          <p>İlk sipariş geldiğinde burada listelenecek. Mağazayı açıp bir test siparişi oluşturarak akışı deneyebilirsin.</p>
+          <a class="btn btn-ikincil" href="/" target="_blank" rel="noopener">Mağazayı aç</a>
+        </div>
+      <% } else { %>
+        <div class="tablo-sar">
+          <table>
+            <thead>
+              <tr><th>Kod</th><th>Müşteri</th><th>Durum</th><th class="sag">Tutar</th><th>Ödeme</th></tr>
+            </thead>
+            <tbody>
+              <% sonSiparisler.forEach(function (s) { %>
+                <tr>
+                  <td><a href="/admin/siparisler/<%= s.id %>" style="color:var(--vurgu); font-weight:600;"><%= s.order_code %></a></td>
+                  <td><%= s.customer_name %><div class="stok-not"><%= s.city %> · <%= s.kalem_sayisi %> kalem</div></td>
+                  <td><span class="durum <%= s.status %>"><%= DURUM_ETIKET[s.status] || s.status %></span></td>
+                  <td class="sag"><%= tl(s.total) %></td>
+                  <td><span class="durum <%= s.payment_status %>"><%= ODEME_ETIKET[s.payment_status] || s.payment_status %></span></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </section>
+
+    <aside>
+      <div class="bolum-baslik" style="margin-bottom:14px;">
+        <h2 style="margin:0; font-size:1.12rem;">Durum dağılımı</h2>
+      </div>
+      <div class="ozet-kart" style="position:static;">
+        <% if (!durumDagilimi.length) { %>
+          <p style="margin:0; font-size:.88rem; color:var(--murekkep-soluk);">Sipariş yok.</p>
+        <% } else { %>
+          <% durumDagilimi.forEach(function (d) { %>
+            <div class="ozet-satir">
+              <span><span class="durum <%= d.status %>"><%= DURUM_ETIKET[d.status] || d.status %></span></span>
+              <span style="font-weight:600; color:var(--murekkep);"><%= d.adet %> · <%= tl(d.tutar) %></span>
+            </div>
+          <% }); %>
+        <% } %>
+      </div>
+
+      <div class="bolum-baslik" style="margin:22px 0 14px;">
+        <h2 style="margin:0; font-size:1.12rem;">Kritik stok</h2>
+      </div>
+      <% if (!dusukStok.length) { %>
+        <div class="ozet-kart" style="position:static;">
+          <p style="margin:0; font-size:.9rem; color:var(--murekkep-soluk);">
+            Stok seviyesi kritik olan ürün yok. 5 adet ve altına düşen ürünler burada görünür.
+          </p>
+        </div>
+      <% } else { %>
+        <div class="ozet-kart" style="position:static;">
+          <% dusukStok.forEach(function (p) { %>
+            <div class="ozet-satir">
+              <a href="/admin/urunler/<%= p.id %>/duzenle" style="color:var(--murekkep);"><%= p.name %></a>
+              <span class="stok-not <%= p.stock <= 0 ? 'yok' : '' %>" style="font-weight:600;"><%= p.stock %> adet</span>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <div class="bolum-baslik" style="margin:22px 0 14px;">
+        <h2 style="margin:0; font-size:1.12rem;">Hızlı işlem</h2>
+      </div>
+      <div class="ozet-kart" style="position:static; display:grid; gap:10px;">
+        <a class="btn btn-birincil btn-tam" href="/admin/urunler/yeni">Yeni ürün ekle</a>
+        <a class="btn btn-ikincil btn-tam" href="/admin/kategoriler">Kategori ekle</a>
+        <a class="btn btn-ikincil btn-tam" href="/admin/siparisler">Siparişlere bak</a>
+      </div>
+    </aside>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="kap">
+  <div class="bolum" style="padding-bottom:0;">
+    <div class="bolum-baslik">
+      <div>
+        <div class="ust-yazi">Katalog</div>
+        <h1><%= aktifKategori ? aktifKategori.name : 'Tüm ürünler' %></h1>
+      </div>
+      <p><%= urunler.length %> ürün listeleniyor<% if (q) { %> · "<%= q %>" araması<% } %></p>
+    </div>
+  </div>
+
+  <div class="filtre-cubuk">
+    <a class="cip <%= !kategoriSlug ? 'aktif' : '' %>" href="/urunler<%= q ? '?q=' + encodeURIComponent(q) : '' %>">Tümü</a>
+    <% kategoriler.forEach(function (k) { %>
+      <a class="cip <%= kategoriSlug === k.slug ? 'aktif' : '' %>"
+         href="/urunler?kategori=<%= k.slug %><%= q ? '&q=' + encodeURIComponent(q) : '' %>"><%= k.name %></a>
+    <% }); %>
+
+    <form class="siralama" action="/urunler" method="get">
+      <% if (q) { %><input type="hidden" name="q" value="<%= q %>"><% } %>
+      <% if (kategoriSlug) { %><input type="hidden" name="kategori" value="<%= kategoriSlug %>"><% } %>
+      <label for="sirala">Sırala</label>
+      <select id="sirala" name="sirala" style="width:auto;" onchange="this.form.submit()">
+        <option value="yeni" <%= sirala === 'yeni' ? 'selected' : '' %>>Yeni eklenenler</option>
+        <option value="fiyat_artan" <%= sirala === 'fiyat_artan' ? 'selected' : '' %>>Fiyat: artan</option>
+        <option value="fiyat_azalan" <%= sirala === 'fiyat_azalan' ? 'selected' : '' %>>Fiyat: azalan</option>
+        <option value="ad" <%= sirala === 'ad' ? 'selected' : '' %>>İsme göre (A–Z)</option>
+      </select>
+    </form>
+  </div>
+
+  <% if (!urunler.length) { %>
+    <div class="bos-durum" style="margin-bottom:40px;">
+      <h3>Sonuç bulunamadı</h3>
+      <p>
+        <%= q ? '"' + q + '" için eşleşen ürün yok.' : 'Bu kategoride henüz ürün yok.' %>
+        Farklı bir arama deneyebilir ya da tüm ürünlere dönebilirsin.
+      </p>
+      <a class="btn btn-birincil" href="/urunler">Tüm ürünlere dön</a>
+    </div>
+  <% } else { %>
+    <div class="izgara" style="padding-bottom:40px;">
+      <% urunler.forEach(function (u) { %>
+        <%- include('partials/urun-kart', { u: u }) %>
+      <% }); %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials/alt') %>

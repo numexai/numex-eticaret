@@ -1,0 +1,97 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="bolum" style="padding-top:clamp(20px,3vw,34px);">
+  <div class="bolum-baslik">
+    <div>
+      <div class="ust-yazi">Katalog</div>
+      <h1><%= urun ? 'Ürünü düzenle' : 'Yeni ürün' %></h1>
+    </div>
+    <a class="btn btn-ikincil" href="/admin/urunler">← Listeye dön</a>
+  </div>
+
+  <form action="<%= urun ? '/admin/urunler/' + urun.id + '/duzenle' : '/admin/urunler/yeni' %>"
+        method="post" enctype="multipart/form-data"
+        style="background:var(--kart); border:1px solid var(--cizgi); border-radius:var(--yaricap); padding:clamp(16px,2.4vw,26px); max-width:900px;">
+
+    <div class="form-izgara">
+      <div class="alan tam">
+        <label for="name">Ürün adı *</label>
+        <input id="name" type="text" name="name" required value="<%= urun ? urun.name : '' %>">
+      </div>
+
+      <div class="alan">
+        <label for="category_id">Kategori</label>
+        <select id="category_id" name="category_id">
+          <option value="">— Kategorisiz —</option>
+          <% kategoriler.forEach(function (k) { %>
+            <option value="<%= k.id %>" <%= urun && urun.category_id === k.id ? 'selected' : '' %>><%= k.name %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div class="alan">
+        <label for="price">Fiyat (₺) *</label>
+        <input id="price" type="number" name="price" step="0.01" min="0" required value="<%= urun ? urun.price : '' %>">
+        <span class="ipucu">Ondalık için nokta kullan: 1249.90</span>
+      </div>
+
+      <div class="alan">
+        <label for="stock">Stok adedi</label>
+        <input id="stock" type="number" name="stock" min="0" value="<%= urun ? urun.stock : 0 %>">
+      </div>
+
+      <div class="alan">
+        <label for="reference">Kaynak / Referans</label>
+        <input id="reference" type="text" name="reference" value="<%= urun ? urun.reference : '' %>">
+        <span class="ipucu">Ürünün kaynağı veya atıf bilgisi (ürün sayfasında ayrı kutuda gösterilir).</span>
+      </div>
+
+      <div class="alan tam">
+        <label for="description">Açıklama</label>
+        <textarea id="description" name="description"><%= urun ? urun.description : '' %></textarea>
+      </div>
+
+      <div class="alan">
+        <label for="image_file">Ürün görseli</label>
+        <input id="image_file" type="file" name="image_file" accept="image/*" style="padding:9px 12px;">
+        <span class="ipucu">JPG, PNG, WEBP veya GIF · en fazla 4 MB</span>
+      </div>
+
+      <div class="alan">
+        <label for="image">veya görsel adresi (URL)</label>
+        <input id="image" type="text" name="image" value="<%= urun ? urun.image : '' %>" placeholder="/uploads/... veya https://...">
+        <span class="ipucu">Dosya yüklersen bu alandaki adres yok sayılır.</span>
+      </div>
+
+      <% if (urun && urun.image) { %>
+        <div class="alan tam">
+          <span class="ipucu">Mevcut görsel:</span>
+          <div class="sepet-kucuk-gorsel" style="width:120px; height:120px;">
+            <img src="<%= urun.image %>" alt="">
+          </div>
+        </div>
+      <% } %>
+
+      <div class="alan">
+        <label>Görünürlük</label>
+        <div class="onay-satir">
+          <input id="active" type="checkbox" name="active" value="1" <%= !urun || urun.active ? 'checked' : '' %>>
+          <label for="active" style="font-weight:500;">Mağazada yayında</label>
+        </div>
+      </div>
+
+      <div class="alan">
+        <label>Vitrin</label>
+        <div class="onay-satir">
+          <input id="featured" type="checkbox" name="featured" value="1" <%= urun && urun.featured ? 'checked' : '' %>>
+          <label for="featured" style="font-weight:500;">Ana sayfada öne çıkar</label>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:22px;">
+      <button class="btn btn-birincil" type="submit"><%= urun ? 'Değişiklikleri kaydet' : 'Ürünü ekle' %></button>
+      <a class="btn btn-ikincil" href="/admin/urunler">Vazgeç</a>
+    </div>
+  </form>
+</div>

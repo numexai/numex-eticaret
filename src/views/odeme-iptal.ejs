@@ -1,0 +1,23 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="kap">
+  <div class="bolum">
+    <div style="max-width:560px;">
+      <h1>Ödeme iptal edildi</h1>
+      <p style="color:var(--murekkep-soluk);">
+        Ödeme sayfasından çıktın; kartından herhangi bir tutar çekilmedi.
+        <% if (kod) { %>
+          <br>Açtığın sipariş <strong style="color:var(--murekkep);"><%= kod %></strong> kodunu bekliyor — sepetini koruyup yeniden deneyebilirsin.
+        <% } else { %>
+          Sepetin olduğu gibi duruyor, dilediğin zaman tekrar deneyebilirsin.
+        <% } %>
+      </p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">
+        <a class="btn btn-birincil" href="/sepet">Sepete dön</a>
+        <a class="btn btn-ikincil" href="/urunler">Ürünlere göz at</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/alt') %>

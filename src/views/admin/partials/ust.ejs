@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= baslik %> · Numex Yönetim</title>
+  <link rel="stylesheet" href="/css/stil.css">
+</head>
+<body class="admin-govde">
+<% if (typeof demoModu !== 'undefined' && demoModu) { %><div style="background:#7a2e12;color:#fff;text-align:center;padding:8px 12px;font-size:.88rem;">Canlı demo: panel salt okunurdur, değişiklik kaydedilmez.</div><% } %>
+<header class="admin-ust">
+  <div class="kap site-ic">
+    <a class="marka" href="/admin">Numex<span class="nokta">.</span> <small>Yönetim</small></a>
+
+    <nav class="admin-menu">
+      <a href="/admin" class="<%= currentPath === '/admin' ? 'aktif' : '' %>">Panel</a>
+      <a href="/admin/urunler" class="<%= currentPath.indexOf('/admin/urunler') === 0 ? 'aktif' : '' %>">Ürünler</a>
+      <a href="/admin/kategoriler" class="<%= currentPath.indexOf('/admin/kategoriler') === 0 ? 'aktif' : '' %>">Kategoriler</a>
+      <a href="/admin/siparisler" class="<%= currentPath.indexOf('/admin/siparisler') === 0 ? 'aktif' : '' %>">Siparişler</a>
+      <a href="/" target="_blank" rel="noopener">Mağazayı gör</a>
+    </nav>
+
+    <div class="admin-kullanici">
+      <span class="ad"><%= currentUser ? currentUser.name : '' %></span>
+      <form action="/admin/cikis" method="post"><button type="submit">Çıkış</button></form>
+    </div>
+  </div>
+</header>
+
+<div class="kap uyarilar" style="margin-bottom:0;">
+  <% (flashSuccess || []).forEach(function (m) { %><div class="uyari-kutu basari"><%= m %></div><% }); %>
+  <% (flashError || []).forEach(function (m) { %><div class="uyari-kutu hata"><%= m %></div><% }); %>
+</div>
+
+<div class="admin-icerik">

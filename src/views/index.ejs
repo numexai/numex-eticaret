@@ -1,0 +1,205 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<section class="hero">
+  <div class="kap hero-ic">
+    <div>
+      <span class="rozet-cip">Numex AI tarafından geliştirildi · MIT lisanslı</span>
+      <h1>Mağazanı <em>bir günde</em> ayağa kaldır.</h1>
+      <p class="aciklama">
+        Vitrin, sepet, kapıda ödeme, Stripe bağlantısı ve yönetim paneli — tek kod tabanında,
+        tek komutla çalışır. Numex E-Ticaret, açık kaynak bir başlangıç iskeletidir:
+        kodu incele, kendi markana uyarla, satmaya başla.
+      </p>
+      <div class="hero-eylem">
+        <a class="btn btn-birincil" href="/urunler">Ürünleri keşfet</a>
+        <a class="btn btn-ikincil" href="/hakkimizda">Altyapıyı incele</a>
+      </div>
+      <div class="hero-guven">
+        <span>Kart bilgisi sitede saklanmaz</span>
+        <span>Kapıda veya kartla ödeme</span>
+        <span>1–3 iş günü teslimat</span>
+      </div>
+    </div>
+    <aside class="hero-panel">
+      <h3>Mağaza özeti</h3>
+      <div class="hero-liste">
+        <div><span>Kategori</span><span><%= kategoriler.length %></span></div>
+        <div><span>Yayındaki ürün</span><span><%= yeniGelenler.length >= 8 ? '8+' : yeniGelenler.length %></span></div>
+        <div><span>Ödeme</span><span>Kapıda ödeme · Stripe</span></div>
+        <div><span>Lisans</span><span>MIT · açık kaynak</span></div>
+      </div>
+      <a class="hero-panel-link" href="/urunler">Kataloğa git →</a>
+    </aside>
+  </div>
+</section>
+
+<section class="guven-serit">
+  <div class="kap guven-izgara">
+    <div class="guven-oge">
+      <div class="guven-baslik">Güvenli ödeme</div>
+      <p>Kart bilgileri PCI-DSS uyumlu ödeme sağlayıcısında işlenir, sitemizde saklanmaz.</p>
+    </div>
+    <div class="guven-oge">
+      <div class="guven-baslik">Hızlı teslimat</div>
+      <p>Ödeme onayından sonra 1–3 iş günü içinde kargoya verilir, takip numarası iletilir.</p>
+    </div>
+    <div class="guven-oge">
+      <div class="guven-baslik">14 gün iade</div>
+      <p>Teslimattan itibaren 14 gün içinde, kullanılmamış ürünler için koşulsuz iade.</p>
+    </div>
+    <div class="guven-oge">
+      <div class="guven-baslik">Sipariş takibi</div>
+      <p>Sipariş kodun ile durumu her an sorgula; her adımda bilgilendirilirsin.</p>
+    </div>
+  </div>
+</section>
+
+<section class="bolum">
+  <div class="kap">
+    <div class="bolum-baslik">
+      <div>
+        <div class="ust-yazi">Kategoriler</div>
+        <h2>Ne arıyorsan burada</h2>
+      </div>
+      <p>Kategoriye tıklayıp ürünleri filtreleyebilirsin.</p>
+    </div>
+    <div class="kategori-serit">
+      <% kategoriler.forEach(function (k) { %>
+        <a class="kategori-kart" href="/urunler?kategori=<%= k.slug %>">
+          <strong><%= k.name %></strong>
+          <span><%= k.description || 'Bu kategorideki ürünleri görüntüle' %></span>
+          <span class="kategori-ok">Ürünleri gör →</span>
+        </a>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<% if (oneCikanlar.length) { %>
+<section class="bolum" style="padding-top:0;">
+  <div class="kap">
+    <div class="bolum-baslik">
+      <div>
+        <div class="ust-yazi">Öne çıkanlar</div>
+        <h2>Editörün seçtiği ürünler</h2>
+      </div>
+      <a class="btn btn-sade" href="/urunler">Tümünü gör</a>
+    </div>
+    <div class="izgara">
+      <% oneCikanlar.forEach(function (u) { %>
+        <%- include('partials/urun-kart', { u: u }) %>
+      <% }); %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<section class="bolum" style="padding-top:0;">
+  <div class="kap">
+    <div class="bolum-baslik">
+      <div>
+        <div class="ust-yazi">Vitrin</div>
+        <h2>Mağazaya yeni eklenenler</h2>
+      </div>
+      <a class="btn btn-sade" href="/urunler?sirala=yeni">Tüm ürünler</a>
+    </div>
+
+    <% if (!yeniGelenler.length) { %>
+      <div class="bos-durum">
+        <h3>Henüz ürün yok</h3>
+        <p>Mağaza kuruldu ama katalog boş. Yönetim panelinden ilk ürününü ekleyerek başlayabilirsin.</p>
+        <a class="btn btn-birincil" href="/admin/urunler/yeni">İlk ürünü ekle</a>
+      </div>
+    <% } else { %>
+      <div class="izgara">
+        <% yeniGelenler.forEach(function (u) { %>
+          <%- include('partials/urun-kart', { u: u }) %>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="bolum bolum-koyu" style="padding-top:0;">
+  <div class="kap" style="padding-top:clamp(28px,4vw,52px);">
+    <div class="bolum-baslik">
+      <div>
+        <div class="ust-yazi">Neden bu altyapı</div>
+        <h2>Hazır kurulan, sahibi olduğun mağaza</h2>
+      </div>
+      <p>Kiralık platform değil; kodu sende kalan bir altyapı.</p>
+    </div>
+    <div class="ozellik-izgara">
+      <div class="ozellik-kart">
+        <span class="ozellik-no">01</span>
+        <h3>Kaynak kodun sende</h3>
+        <p>MIT lisansı: kodu inceleyebilir, değiştirebilir, kendi sunucunda barındırabilirsin. Aylık platform ücreti yok.</p>
+      </div>
+      <div class="ozellik-kart">
+        <span class="ozellik-no">02</span>
+        <h3>Gerçek ödeme altyapısı</h3>
+        <p>Checkout akışı ve imza doğrulamalı webhook ile sipariş durumu kendiliğinden güncellenir.</p>
+      </div>
+      <div class="ozellik-kart">
+        <span class="ozellik-no">03</span>
+        <h3>Tek panelde yönetim</h3>
+        <p>Ürün, kategori, stok, görsel yükleme ve sipariş durumu — hepsi tek ekranda.</p>
+      </div>
+      <div class="ozellik-kart">
+        <span class="ozellik-no">04</span>
+        <h3>Sunucu tarafı doğrulama</h3>
+        <p>Sepetteki fiyat ve stok her seferinde sunucuda yeniden hesaplanır; istemciye güvenilmez.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bolum" style="padding-top:0;">
+  <div class="kap">
+    <div class="bolum-baslik">
+      <div>
+        <div class="ust-yazi">Müşteri deneyimi</div>
+        <h2>Alışverişin her adımı düşünüldü</h2>
+      </div>
+    </div>
+    <div class="yorum-izgara">
+      <div class="yorum-kart">
+        <div class="yildiz" aria-label="5 üzerinden 5">★★★★★</div>
+        <p>“Sipariş verdikten iki gün sonra elimdeydi. Takip sayfasından durumu anlık görebilmek büyük rahatlık.”</p>
+        <div class="yorum-kisi">Elif K.</div>
+      </div>
+      <div class="yorum-kart">
+        <div class="yildiz" aria-label="5 üzerinden 5">★★★★★</div>
+        <p>“Ödeme sayfası sade; kart bilgisinin sitede tutulmadığını yazmaları güven verdi.”</p>
+        <div class="yorum-kisi">Murat S.</div>
+      </div>
+      <div class="yorum-kart">
+        <div class="yildiz" aria-label="4 üzerinden 5">★★★★☆</div>
+        <p>“Bir ürünü iade ettim, süreç yazdığı gibi 14 gün içinde tamamlandı. Sorun yaşamadım.”</p>
+        <div class="yorum-kisi">Zeynep A.</div>
+      </div>
+    </div>
+    <p class="yorum-not">
+      Bu bölüm örnek metindir; mağazanı yayına alırken kendi müşteri yorumlarınla değiştir.
+    </p>
+  </div>
+</section>
+
+<section class="bolum" style="padding-top:0;">
+  <div class="kap">
+    <div class="bulten">
+      <div>
+        <h2 style="margin-bottom:8px;">Yeni ürünlerden ilk sen haberdar ol</h2>
+        <p style="margin:0; color:#cfc9c0; font-size:.94rem;">
+          Ayda en fazla bir e-posta: yeni gelenler, indirimler. İstediğin an çıkarsın.
+        </p>
+      </div>
+      <form class="bulten-form" action="/hakkimizda" method="get">
+        <input type="email" name="eposta" placeholder="E-posta adresin" aria-label="E-posta adresin" required>
+        <button class="btn btn-birincil" type="submit">Katıl</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/alt') %>

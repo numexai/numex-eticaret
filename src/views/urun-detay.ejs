@@ -1,0 +1,85 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="kap">
+  <div class="kirinti">
+    <a href="/">Ana Sayfa</a> <span>/</span>
+    <a href="/urunler">Ürünler</a>
+    <% if (urun.category_slug) { %>
+      <span>/</span> <a href="/urunler?kategori=<%= urun.category_slug %>"><%= urun.category_name %></a>
+    <% } %>
+    <span>/</span> <span style="color:var(--murekkep);"><%= urun.name %></span>
+  </div>
+
+  <div class="detay" style="padding-top:0;">
+    <div class="detay-gorsel">
+      <img src="<%= urun.image || urunKapagi(urun) %>" alt="<%= urun.name %>">
+    </div>
+
+    <div>
+      <% if (urun.category_name) { %>
+        <span class="urun-kategori"><%= urun.category_name %></span>
+      <% } %>
+      <h1><%= urun.name %></h1>
+      <div class="detay-meta">
+        <span class="detay-kod">Ürün kodu: NMX-<%= String(urun.id).padStart(4, '0') %></span>
+      </div>
+      <p class="aciklama"><%= urun.description || 'Bu ürün için açıklama girilmemiş.' %></p>
+
+      <% if (urun.reference) { %>
+        <div class="referans-kutu">
+          <strong>Kaynak / Referans</strong>
+          <%= urun.reference %>
+        </div>
+      <% } %>
+
+      <div class="satin-alma">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <span class="fiyat buyuk"><%= tl(urun.price) %></span>
+          <span class="stok-not <%= urun.stock <= 0 ? 'yok' : '' %>">
+            <%= urun.stock <= 0 ? 'Stokta yok' : 'Stokta ' + urun.stock + ' adet' %>
+          </span>
+        </div>
+
+        <% if (urun.stock > 0) { %>
+          <form action="/sepet/ekle?urun=<%= urun.id %>" method="post" style="display:grid; gap:14px;">
+            <input type="hidden" name="geri" value="/urun/<%= urun.slug %>">
+            <div class="adet-satir">
+              <label for="quantity">Adet</label>
+              <input id="quantity" type="number" name="quantity" value="1" min="1" max="<%= urun.stock %>">
+            </div>
+            <button class="btn btn-birincil btn-tam" type="submit">Sepete ekle</button>
+          </form>
+        <% } else { %>
+          <button class="btn btn-ikincil btn-tam" type="button" disabled style="opacity:.6; cursor:not-allowed;">Stokta yok</button>
+          <p style="margin:0; font-size:.84rem; color:var(--murekkep-soluk);">
+            Bu ürün tükendi. Yönetim panelinden stok girişi yapıldığında tekrar satışa açılır.
+          </p>
+        <% } %>
+
+        <div class="detay-avantaj">
+          <span>Kapıda ödeme veya Stripe ile kart — kart bilgisi sitede saklanmaz</span>
+          <span>Tahmini teslimat: 1–3 iş günü, kargo takip numarası e-posta ile</span>
+          <span>14 gün içinde koşulsuz iade hakkı</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if (benzerler.length) { %>
+    <section class="bolum" style="padding-top:0;">
+      <div class="bolum-baslik">
+        <div>
+          <div class="ust-yazi">Benzer ürünler</div>
+          <h2>Bunlar da ilgini çekebilir</h2>
+        </div>
+      </div>
+      <div class="izgara">
+        <% benzerler.forEach(function (u) { %>
+          <%- include('partials/urun-kart', { u: u }) %>
+        <% }); %>
+      </div>
+    </section>
+  <% } %>
+</div>
+
+<%- include('partials/alt') %>

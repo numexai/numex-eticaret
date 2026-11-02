@@ -1,0 +1,37 @@
+{
+  "name": "numex-eticaret",
+  "version": "1.0.0",
+  "description": "Numex AI tarafından geliştirilen, MIT lisanslı e-ticaret başlangıç iskeleti (vitrin + sepet + kapıda ödeme + Stripe bağlantısı + yönetim paneli).",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node src/seed.js"
+  },
+  "keywords": [
+    "e-ticaret",
+    "express",
+    "sqlite",
+    "stripe",
+    "numex",
+    "mit"
+  ],
+  "author": "Numex AI",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "multer": "^2.0.1",
+    "sqlite3": "^6.0.1",
+    "stripe": "^16.9.0"
+  }
+}

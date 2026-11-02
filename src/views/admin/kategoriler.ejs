@@ -1,0 +1,66 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="bolum" style="padding-top:clamp(20px,3vw,34px);">
+  <div class="bolum-baslik">
+    <div>
+      <div class="ust-yazi">Katalog</div>
+      <h1>Kategoriler</h1>
+    </div>
+    <p><%= kategoriler.length %> kategori tanımlı</p>
+  </div>
+
+  <div class="iki-kolon">
+    <div class="tablo-sar">
+      <table>
+        <thead>
+          <tr><th>Kategori</th><th class="sag">Ürün</th><th class="sag">Sıra</th><th class="sag">İşlem</th></tr>
+        </thead>
+        <tbody>
+          <% if (!kategoriler.length) { %>
+            <tr><td colspan="4" style="text-align:center; color:var(--murekkep-soluk); padding:26px;">Henüz kategori yok. Sağdaki formdan ekleyebilirsin.</td></tr>
+          <% } %>
+          <% kategoriler.forEach(function (k) { %>
+            <tr>
+              <td>
+                <form action="/admin/kategoriler/<%= k.id %>/guncelle" method="post" id="kat-<%= k.id %>" style="display:grid; gap:6px;">
+                  <input type="text" name="name" value="<%= k.name %>" required style="min-height:38px; padding:6px 10px;">
+                  <input type="text" name="description" value="<%= k.description %>" placeholder="Açıklama" style="min-height:38px; padding:6px 10px; font-size:.84rem;">
+                </form>
+              </td>
+              <td class="sag"><%= k.urun_sayisi %></td>
+              <td class="sag" style="width:90px;">
+                <input form="kat-<%= k.id %>" type="number" name="sort_order" value="<%= k.sort_order %>" min="0" style="min-height:38px; padding:6px 10px; width:70px;">
+              </td>
+              <td class="sag" style="white-space:nowrap;">
+                <button form="kat-<%= k.id %>" class="btn btn-ikincil btn-kucuk" type="submit">Kaydet</button>
+                <form action="/admin/kategoriler/<%= k.id %>/sil" method="post" style="display:inline;" onsubmit="return confirm('&quot;<%= k.name %>&quot; kategorisi silinecek. İçindeki ürünler kategorisiz kalır. Emin misin?');">
+                  <button class="btn btn-tehlike btn-kucuk" type="submit">Sil</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="ozet-kart" style="position:static;">
+      <h3 style="margin-bottom:14px;">Yeni kategori</h3>
+      <form action="/admin/kategoriler" method="post" style="display:grid; gap:12px;">
+        <div class="alan">
+          <label for="name">Kategori adı *</label>
+          <input id="name" type="text" name="name" required>
+        </div>
+        <div class="alan">
+          <label for="description">Açıklama</label>
+          <input id="description" type="text" name="description">
+        </div>
+        <div class="alan">
+          <label for="sort_order">Sıra</label>
+          <input id="sort_order" type="number" name="sort_order" value="0" min="0">
+          <span class="ipucu">Küçük sayı önce görünür.</span>
+        </div>
+        <button class="btn btn-birincil btn-tam" type="submit">Kategori ekle</button>
+      </form>
+    </aside>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="bolum" style="padding-top:clamp(20px,3vw,34px);">
+  <div class="bolum-baslik">
+    <div>
+      <div class="ust-yazi">Satış</div>
+      <h1>Siparişler</h1>
+    </div>
+    <p><%= siparisler.length %> sipariş<%= durum ? ' · filtrelenmiş' : '' %></p>
+  </div>
+
+  <div class="filtre-cubuk" style="padding-top:0;">
+    <a class="cip <%= !durum ? 'aktif' : '' %>" href="/admin/siparisler">Tümü</a>
+    <% ['yeni','hazirlaniyor','kargoda','teslim','iptal'].forEach(function (d) { %>
+      <a class="cip <%= durum === d ? 'aktif' : '' %>" href="/admin/siparisler?durum=<%= d %>"><%= DURUM_ETIKET[d] %></a>
+    <% }); %>
+  </div>
+
+  <% if (!siparisler.length) { %>
+    <div class="bos-durum">
+      <h3>Sipariş yok</h3>
+      <p>Bu filtrede gösterilecek sipariş bulunmuyor. Mağazadan bir sipariş oluşturarak akışı test edebilirsin.</p>
+      <a class="btn btn-ikincil" href="/" target="_blank" rel="noopener">Mağazayı aç</a>
+    </div>
+  <% } else { %>
+    <div class="tablo-sar">
+      <table>
+        <thead>
+          <tr>
+            <th>Kod</th>
+            <th>Müşteri</th>
+            <th>Tarih</th>
+            <th class="sag">Tutar</th>
+            <th>Ödeme</th>
+            <th>Durum</th>
+            <th class="sag"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% siparisler.forEach(function (s) { %>
+            <tr>
+              <td><a href="/admin/siparisler/<%= s.id %>" style="color:var(--vurgu); font-weight:600;"><%= s.order_code %></a></td>
+              <td>
+                <%= s.customer_name %>
+                <div class="stok-not"><%= s.customer_email %></div>
+              </td>
+              <td style="white-space:nowrap;"><%= tarih(s.created_at) %></td>
+              <td class="sag"><%= tl(s.total) %></td>
+              <td><span class="durum <%= s.payment_status %>"><%= ODEME_ETIKET[s.payment_status] || s.payment_status %></span></td>
+              <td><span class="durum <%= s.status %>"><%= DURUM_ETIKET[s.status] || s.status %></span></td>
+              <td class="sag"><a class="btn btn-ikincil btn-kucuk" href="/admin/siparisler/<%= s.id %>">Detay</a></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>

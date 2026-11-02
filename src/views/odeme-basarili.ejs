@@ -1,0 +1,70 @@
+<%- include('partials/ust', { baslik: baslik }) %>
+
+<div class="kap">
+  <div class="bolum">
+    <div style="max-width:640px;">
+      <div class="uyari-kutu basari" style="margin-bottom:22px;">
+        Siparişin alındı. Ayrıntılar aşağıda.
+      </div>
+
+      <h1>Siparişin alındı, teşekkürler.</h1>
+      <p style="color:var(--murekkep-soluk);">
+        Sipariş kodun <strong style="color:var(--murekkep); letter-spacing:.04em;"><%= siparis.order_code %></strong>.
+        Bu kodu ve e-posta adresini kullanarak <a href="/siparis-takip" style="color:var(--vurgu);">sipariş takibi</a> sayfasından durumu izleyebilirsin.
+      </p>
+
+      <div class="tablo-sar" style="margin:22px 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Ürün</th>
+              <th class="sag">Birim fiyat</th>
+              <th class="sag">Adet</th>
+              <th class="sag">Tutar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% kalemler.forEach(function (k) { %>
+              <tr>
+                <td><%= k.product_name %></td>
+                <td class="sag"><%= tl(k.unit_price) %></td>
+                <td class="sag"><%= k.quantity %></td>
+                <td class="sag"><%= tl(k.unit_price * k.quantity) %></td>
+              </tr>
+            <% }); %>
+            <tr>
+              <td colspan="3" class="sag" style="font-weight:700;">Genel toplam</td>
+              <td class="sag" style="font-weight:700;"><%= tl(siparis.total) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ozet-kart" style="position:static; margin-bottom:24px;">
+        <div class="ozet-satir">
+          <span>Ödeme yöntemi</span>
+          <span style="color:var(--murekkep); font-weight:600;"><%= siparis.payment_method === 'stripe' ? 'Kredi kartı (Stripe)' : 'Kapıda ödeme' %></span>
+        </div>
+        <div class="ozet-satir">
+          <span>Ödeme durumu</span>
+          <span class="durum <%= siparis.payment_status %>"><%= ODEME_ETIKET[siparis.payment_status] || siparis.payment_status %></span>
+        </div>
+        <div class="ozet-satir">
+          <span>Sipariş durumu</span>
+          <span class="durum <%= siparis.status %>"><%= DURUM_ETIKET[siparis.status] || siparis.status %></span>
+        </div>
+        <div class="ozet-satir">
+          <span>Teslimat</span>
+          <span style="color:var(--murekkep); text-align:right;"><%= siparis.customer_name %> · <%= siparis.city %></span>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn btn-birincil" href="/urunler">Alışverişe devam et</a>
+        <a class="btn btn-ikincil" href="/siparis-takip">Sipariş takibi</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/alt') %>
